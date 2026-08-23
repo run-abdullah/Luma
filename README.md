@@ -1,19 +1,45 @@
-# README
+# Luma 📝
 
-## About
+A beautiful, fast, and minimal note-taking app built with Wails (Go) and SolidJS.
 
-This is the official Wails Vanilla template.
+![Luma](build/appicon.png)
 
-You can configure the project by editing `wails.json`. More information about the project settings can be found
-here: https://wails.io/docs/reference/project-config
+## ✨ Features
 
-## Live Development
+- 📂 **Vault System** - Import any folder as your notes vault
+- 📁 **Collections** - Organize notes in nested folders
+- 📝 **Rich Text Editor** - Full-featured TipTap editor with tables, code blocks, images, and more
+- 🔍 **Instant Search** - Search across all your notes by title or content
+- 🎨 **Themes** - 5+ built-in themes with custom theme creator
+- 🌙 **Dark/Light Mode** - Toggle between dark and light appearance
+- 📐 **Resizable Panels** - Customize your workspace layout
+- 💾 **Auto-Save** - Your notes save automatically as you type
+- ⚡ **Blazing Fast** - Built with SolidJS and Go for instant performance
+- 📦 **Lightweight** - Only 10MB binary, unlike Electron apps
 
-To run in live development mode, run `wails dev` in the project directory. This will run a Vite development
-server that will provide very fast hot reload of your frontend changes. If you want to develop in a browser
-and have access to your Go methods, there is also a dev server that runs on http://localhost:34115. Connect
-to this in your browser, and you can call your Go code from devtools.
+## 🚀 Tech Stack
 
-## Building
+- **Backend:** Go with Wails framework
+- **Frontend:** SolidJS + Vite
+- **Editor:** TipTap
+- **Styling:** Tailwind CSS v4
 
-To build a redistributable, production mode package, use `wails build`.
+## 📦 Installation
+
+### From Source
+
+```bash
+# Clone the repository
+git clone git@github.com:run-abdullah/Luma.git
+cd Luma
+
+# Install dependencies
+cd frontend
+pnpm install
+cd ..
+
+# Run in development
+wails dev -tags webkit2_41
+
+# Build for production
+wails build -tags webkit2_41
