@@ -15,9 +15,13 @@ export function GetCollections(arg1:string):Promise<Array<main.Collection>>;
 
 export function GetNotes(arg1:string):Promise<Array<main.Note>>;
 
+export function GetVault():Promise<main.Vault>;
+
 export function Greet(arg1:string):Promise<string>;
 
 export function ImportVault():Promise<main.Vault>;
+
+export function LoadVaultPath():Promise<string>;
 
 export function ReadNote(arg1:string):Promise<main.Note>;
 
@@ -26,5 +30,7 @@ export function RenameCollection(arg1:string,arg2:string):Promise<void>;
 export function RenameNote(arg1:string,arg2:string):Promise<main.Note>;
 
 export function SaveNote(arg1:string,arg2:string,arg3:jsontext.Value):Promise<void>;
+
+export function SaveVaultPath(arg1:string):Promise<void>;
 
 export function SearchNotes(arg1:string,arg2:string):Promise<Array<main.Note>>;

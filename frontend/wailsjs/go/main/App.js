@@ -26,12 +26,20 @@ export function GetNotes(arg1) {
   return window['go']['main']['App']['GetNotes'](arg1);
 }
 
+export function GetVault() {
+  return window['go']['main']['App']['GetVault']();
+}
+
 export function Greet(arg1) {
   return window['go']['main']['App']['Greet'](arg1);
 }
 
 export function ImportVault() {
   return window['go']['main']['App']['ImportVault']();
+}
+
+export function LoadVaultPath() {
+  return window['go']['main']['App']['LoadVaultPath']();
 }
 
 export function ReadNote(arg1) {
@@ -48,6 +56,10 @@ export function RenameNote(arg1, arg2) {
 
 export function SaveNote(arg1, arg2, arg3) {
   return window['go']['main']['App']['SaveNote'](arg1, arg2, arg3);
+}
+
+export function SaveVaultPath(arg1) {
+  return window['go']['main']['App']['SaveVaultPath'](arg1);
 }
 
 export function SearchNotes(arg1, arg2) {

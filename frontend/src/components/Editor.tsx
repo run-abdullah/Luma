@@ -170,19 +170,30 @@ export default function Editor() {
     }
   }
 
-  const toggleEditMode = () => {
+  const toggleEditMode = async () => {
     const note = currentNote()
     if (!note) return
 
     const newMode = !isEditing()
+
+    if (!newMode && editorInstance) {
+      const json = editorInstance.getJSON()
+      await SaveNote(note.path, note.title, json)
+      setSaved(true)
+    }
+
     setIsEditing(newMode)
 
-    setTimeout(() => {
+    setTimeout(async () => {
       const element = document.querySelector('[data-editor-container]') as HTMLElement
       if (element) {
-        initEditor(note, element, newMode)
+        const freshNote = await ReadNote(note.id)
+        if (freshNote) {
+          setCurrentNote(freshNote)
+          initEditor(freshNote, element, newMode)
+        }
       }
-    }, 50)
+    }, 100)
   }
 
   onMount(() => {

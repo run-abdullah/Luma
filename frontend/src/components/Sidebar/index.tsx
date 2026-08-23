@@ -2,8 +2,9 @@ import { For, Show, createMemo, createSignal } from 'solid-js'
 import { FiShield, FiFolderOpen, FiPlus } from '../Icons'
 import CollectionItem from './CollectionItem'
 import { vault, collections, sidebarOpen, setVault, setCollections } from '../../store/atoms'
-import { ImportVault, GetCollections } from "../../../wailsjs/go/main/App";
+import { ImportVault, GetCollections,GetVault } from "../../../wailsjs/go/main/App";
 import CreateCollectionModal from '../CreateCollectionModal'
+import { onMount } from 'solid-js'
 
 export default function Sidebar() {
   const [width, setWidth] = createSignal(300)
@@ -13,7 +14,18 @@ export default function Sidebar() {
   const rootCollections = createMemo(() =>
     collections.filter(c => !c.parentId || c.parentId === "")
   )
-
+  onMount(async () => {
+    try {
+      const savedVault = await GetVault()
+      if (savedVault) {
+        setVault(savedVault)
+        const cols = await GetCollections(savedVault.path)
+        setCollections(cols || [])
+      }
+    } catch (error) {
+      console.error('Failed to load saved vault:', error)
+    }
+  })
   const handleImportVault = async () => {
     try {
       const importedVault = await ImportVault()

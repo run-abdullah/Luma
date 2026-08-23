@@ -85,6 +85,11 @@ func (a *App) ImportVault() (*Vault, error) {
 		return nil, fmt.Errorf("not a folder")
 	}
 
+	// Save vault path
+	if err := a.SaveVaultPath(path); err != nil {
+		fmt.Printf("Warning: Could not save vault path: %v\n", err)
+	}
+
 	vault := &Vault{
 		ID:        filepath.Base(path),
 		Name:      filepath.Base(path),
@@ -327,7 +332,7 @@ func (a *App) RenameCollection(path string, newName string) error {
 
 // RenameNote renames a note file
 func (a *App) RenameNote(notePath string, newTitle string) (*Note, error) {
-	// Pehle purana data read karo
+
 	data, err := os.ReadFile(notePath)
 	if err != nil {
 		return nil, err
@@ -342,27 +347,22 @@ func (a *App) RenameNote(notePath string, newTitle string) (*Note, error) {
 		return nil, err
 	}
 
-	// Title update karo
 	noteData.Title = newTitle
 
-	// Updated data write karo
 	updatedData, err := json.MarshalIndent(noteData, "", "  ")
 	if err != nil {
 		return nil, err
 	}
 
-	// File rename karo
 	newPath := filepath.Join(filepath.Dir(notePath), newTitle+".json")
 	if err := os.Rename(notePath, newPath); err != nil {
 		return nil, err
 	}
 
-	// Updated content write karo
 	if err := os.WriteFile(newPath, updatedData, 0644); err != nil {
 		return nil, err
 	}
 
-	// Updated note return karo
 	return a.ReadNote(newPath)
 }
 
@@ -437,4 +437,77 @@ func (a *App) SearchNotes(vaultPath string, query string) ([]Note, error) {
 	})
 
 	return results, nil
+}
+
+// Config file path
+func (a *App) getConfigPath() string {
+	homeDir, _ := os.UserHomeDir()
+	return filepath.Join(homeDir, ".luma", "config.json")
+}
+
+// SaveVaultPath saves vault path to config
+func (a *App) SaveVaultPath(vaultPath string) error {
+	configDir := filepath.Dir(a.getConfigPath())
+	if err := os.MkdirAll(configDir, 0755); err != nil {
+		return err
+	}
+
+	config := struct {
+		VaultPath string `json:"vaultPath"`
+	}{
+		VaultPath: vaultPath,
+	}
+
+	data, err := json.MarshalIndent(config, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	return os.WriteFile(a.getConfigPath(), data, 0644)
+}
+
+// LoadVaultPath loads vault path from config
+func (a *App) LoadVaultPath() (string, error) {
+	data, err := os.ReadFile(a.getConfigPath())
+	if err != nil {
+		return "", nil // No config file yet
+	}
+
+	var config struct {
+		VaultPath string `json:"vaultPath"`
+	}
+
+	if err := json.Unmarshal(data, &config); err != nil {
+		return "", err
+	}
+
+	return config.VaultPath, nil
+}
+
+// GetVault loads vault info from saved path
+func (a *App) GetVault() (*Vault, error) {
+	vaultPath, err := a.LoadVaultPath()
+	if err != nil || vaultPath == "" {
+		return nil, nil
+	}
+
+	// Check if folder exists
+	info, err := os.Stat(vaultPath)
+	if err != nil {
+		return nil, nil // Folder not found, ignore
+	}
+
+	if !info.IsDir() {
+		return nil, nil
+	}
+
+	vault := &Vault{
+		ID:        filepath.Base(vaultPath),
+		Name:      filepath.Base(vaultPath),
+		Path:      vaultPath,
+		CreatedAt: info.ModTime().Format(time.RFC3339),
+		UpdatedAt: info.ModTime().Format(time.RFC3339),
+	}
+
+	return vault, nil
 }
