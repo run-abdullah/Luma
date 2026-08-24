@@ -43,7 +43,13 @@ export default function RightSidebar() {
     setLoading(true)
     try {
       const fetchedNotes = await GetNotes(path)
-      setNotes(fetchedNotes || [])
+      const sortedNotes = (fetchedNotes || []).sort((a, b) => {
+        return a.title.localeCompare(b.title, undefined, {
+          numeric: true,
+          sensitivity: 'base'
+        })
+      })
+      setNotes(sortedNotes)
     } catch (error) {
       console.error('Failed to load notes:', error)
     } finally {
