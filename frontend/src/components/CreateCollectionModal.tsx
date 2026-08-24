@@ -14,7 +14,9 @@ export default function CreateCollectionModal(props: Props) {
   const [error, setError] = createSignal('')
   const [loading, setLoading] = createSignal(false)
 
-  const handleCreate = async () => {
+  const handleCreate = async (e?: Event) => {
+    e?.preventDefault()
+
     if (!name().trim()) {
       setError('Name is required')
       return
@@ -38,7 +40,7 @@ export default function CreateCollectionModal(props: Props) {
 
   return (
     <Modal isOpen={props.isOpen} onClose={props.onClose} title="New Collection">
-      <div class="space-y-4">
+      <form onSubmit={handleCreate} class="space-y-4">
         <div>
           <label class="block text-sm text-text-secondary mb-1">Collection Name</label>
           <input
@@ -56,20 +58,21 @@ export default function CreateCollectionModal(props: Props) {
 
         <div class="flex justify-end gap-2">
           <button
+            type="button"
             onClick={props.onClose}
             class="px-4 py-2 rounded-lg text-text-secondary hover:text-text-primary hover:bg-bg-tertiary transition-colors text-sm"
           >
             Cancel
           </button>
           <button
-            onClick={handleCreate}
+            type="submit"
             disabled={loading()}
             class="px-4 py-2 rounded-lg bg-accent text-white hover:bg-accent-hover transition-colors text-sm disabled:opacity-50"
           >
             {loading() ? 'Creating...' : 'Create'}
           </button>
         </div>
-      </div>
+      </form>
     </Modal>
   )
 }
