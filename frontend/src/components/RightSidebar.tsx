@@ -12,7 +12,7 @@ import Loader from './Loader'
 export default function RightSidebar() {
   const [notes, setNotes] = createSignal<Note[]>([])
   const [isOpen, setIsOpen] = createSignal(true)
-  const [width, setWidth] = createSignal(288)
+  const [width, setWidth] = createSignal(250)
   const [isResizing, setIsResizing] = createSignal(false)
   const [showCreateModal, setShowCreateModal] = createSignal(false)
   const [showRenameModal, setShowRenameModal] = createSignal(false)

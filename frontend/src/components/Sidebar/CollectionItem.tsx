@@ -19,8 +19,16 @@ export default function CollectionItem(props: Props) {
   const [showRenameModal, setShowRenameModal] = createSignal(false)
   const [showDeleteModal, setShowDeleteModal] = createSignal(false)
 
-  const children = () => collections.filter(c => c.parentId === props.collection.id)
-
+  const children = () => {
+    return collections
+      .filter(c => c.parentId === props.collection.id)
+      .sort((a, b) => {
+        return a.name.localeCompare(b.name, undefined, {
+          numeric: true,
+          sensitivity: 'base'
+        })
+      })
+  }
   const menuItems = () => {
     if (props.collection.hasNotes) {
       return [

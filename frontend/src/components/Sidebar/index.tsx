@@ -7,13 +7,20 @@ import CreateCollectionModal from '../CreateCollectionModal'
 import { onMount } from 'solid-js'
 
 export default function Sidebar() {
-  const [width, setWidth] = createSignal(300)
+  const [width, setWidth] = createSignal(254)
   const [isResizing, setIsResizing] = createSignal(false)
   const [showCreateModal, setShowCreateModal] = createSignal(false)
 
-  const rootCollections = createMemo(() =>
-    collections.filter(c => !c.parentId || c.parentId === "")
-  )
+  const rootCollections = createMemo(() => {
+    return collections
+      .filter(c => !c.parentId || c.parentId === "")
+      .sort((a, b) => {
+        return a.name.localeCompare(b.name, undefined, {
+          numeric: true,
+          sensitivity: 'base'
+        })
+      })
+  })
   onMount(async () => {
     try {
       const savedVault = await GetVault()
