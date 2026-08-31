@@ -14,7 +14,7 @@ import { Highlight } from '@tiptap/extension-highlight'
 import { TaskList } from '@tiptap/extension-task-list'
 import { TaskItem } from '@tiptap/extension-task-item'
 import { CodeBlockLowlight } from '@tiptap/extension-code-block-lowlight'
-import { createLowlight, common } from 'lowlight'
+import { createLowlight, all } from 'lowlight'
 import { selectedNoteId } from '../store/atoms'
 import { ReadNote, SaveNote } from '../../wailsjs/go/main/App'
 import { setSelectedNoteId } from '../store/atoms'
@@ -27,7 +27,7 @@ import {
   FiEdit2, FiEye
 } from './Icons'
 
-const lowlight = createLowlight(common)
+const lowlight = createLowlight(all)
 
 export default function Editor() {
   const [currentNote, setCurrentNote] = createSignal<any>(null)
@@ -52,6 +52,7 @@ export default function Editor() {
         }),
         CodeBlockLowlight.configure({
           lowlight,
+          defaultLanguage: 'javascript',
         }),
         Underline,
         TextAlign.configure({
